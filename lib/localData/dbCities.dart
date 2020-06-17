@@ -33,15 +33,15 @@ class DatabaseCity {
     await db.execute('CREATE TABLE cities (id INTEGER PRIMARY KEY,city TEXT)');
   }
 
-  Future<int> saveData(CityDbModel countryDbModel)async {
+  Future<int> saveData(CityDbModel cityDbModel)async {
       var dbClient = await db;
-      int res = await dbClient.insert("cities", countryDbModel.toMap());
+      int res = await dbClient.insert("cities", cityDbModel.toMap());
       debugPrint('data has been saved to table');
       debugPrint('res length: $res');
       return res;
     }
   
-    Future<void> deleteData(CityDbModel countryDbModel) async {
+    Future<void> deleteData(CityDbModel cityDbModel) async {
       // Get a reference to the database.
       final dbClient = await db;
   
@@ -51,7 +51,7 @@ class DatabaseCity {
         // Ensure that the Dog has a matching id.
         where: "id = ?",
         // Pass the Dog's id as a whereArg to prevent SQL injection.
-        whereArgs: [countryDbModel.id],
+        whereArgs: [cityDbModel.id],
       );
       debugPrint('data has been deleted lah');
     }

@@ -3,6 +3,7 @@ import 'package:splashbloc/currentLocation/currentlocation.dart';
 import 'package:splashbloc/dialogs/dialogCities.dart';
 import 'package:splashbloc/featured/featuredCities.dart';
 import 'package:splashbloc/localData/dbCities.dart';
+import 'package:splashbloc/selectedCities/selectedCities.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   List _pages = [
     CurrentLocation(),
     FeaturedCities(),
-    Text("Account"),
+    SelectedCities(),
   ];
 
   @override

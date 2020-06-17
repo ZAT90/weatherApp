@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:splashbloc/models/locationModel.dart';
 import 'package:splashbloc/models/weatherForecast.dart';
 
@@ -21,6 +22,7 @@ class ApiProvider {
   Future<LocationModel> fetchFeaturedCityWeather(String cityName) async {
     final response =
         await dio.get(_baseUrl + 'data/2.5/weather?q=$cityName&appid=$apiKey');
+        //debugPrint('response data fetch city :${response.data}');
     return LocationModel.fromJson(response.data);
   }
 
