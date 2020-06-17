@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:splashbloc/models/locationModel.dart';
 import 'package:splashbloc/models/weatherForecast.dart';
 

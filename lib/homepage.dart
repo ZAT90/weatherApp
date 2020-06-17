@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:splashbloc/currentLocation/currentlocation.dart';
 import 'package:splashbloc/dialogs/dialogCities.dart';
 import 'package:splashbloc/featured/featuredCities.dart';
-import 'package:splashbloc/localData/dbCountries.dart';
+import 'package:splashbloc/localData/dbCities.dart';
 
-import 'models/countrydbModel.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -25,9 +24,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DatabaseCountry db = DatabaseCountry();
+  DatabaseCity db = DatabaseCity();
   int _cIndex = 0;
-  List<CountryDbModel> dbCountries = [];
   List _pages = [
     CurrentLocation(),
     FeaturedCities(),
@@ -36,9 +34,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    db.initDbCountries();
+    db.initDbCities();
   }
 
   void _incrementTab(index) {

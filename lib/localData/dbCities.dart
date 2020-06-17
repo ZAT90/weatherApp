@@ -3,51 +3,51 @@ import 'dart:io' as io;
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:splashbloc/models/countrydbModel.dart';
+import 'package:splashbloc/models/citydbModel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
-class DatabaseCountry {
-  static final DatabaseCountry _instance = new DatabaseCountry.internal();
-  factory DatabaseCountry() => _instance;
+class DatabaseCity {
+  static final DatabaseCity _instance = new DatabaseCity.internal();
+  factory DatabaseCity() => _instance;
 
   static Database _db;
 
   Future<Database> get db async {
     if (_db != null) return _db;
-    _db = await initDbCountries();
+    _db = await initDbCities();
     return _db;
   }
 
-  DatabaseCountry.internal();
+  DatabaseCity.internal();
 
-  initDbCountries() async {
+  initDbCities() async {
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "weatherCountries.db");
+    String path = join(documentsDirectory.path, "weatherCities.db");
     var theDb = await openDatabase(path, version: 1, onCreate: _onCreate);
     return theDb;
   }
 
   void _onCreate(Database db, int version) async {
     debugPrint('table has been created');
-    await db.execute('CREATE TABLE countries (id INTEGER PRIMARY KEY,country TEXT)');
+    await db.execute('CREATE TABLE cities (id INTEGER PRIMARY KEY,city TEXT)');
   }
 
-  Future<int> saveData(CountryDbModel countryDbModel)async {
+  Future<int> saveData(CityDbModel countryDbModel)async {
       var dbClient = await db;
-      int res = await dbClient.insert("countries", countryDbModel.toMap());
+      int res = await dbClient.insert("cities", countryDbModel.toMap());
       debugPrint('data has been saved to table');
       debugPrint('res length: $res');
       return res;
     }
   
-    Future<void> deleteData(CountryDbModel countryDbModel) async {
+    Future<void> deleteData(CityDbModel countryDbModel) async {
       // Get a reference to the database.
       final dbClient = await db;
   
       // Update the given Dog.
       await dbClient.delete(
-        'countries',
+        'cities',
         // Ensure that the Dog has a matching id.
         where: "id = ?",
         // Pass the Dog's id as a whereArg to prevent SQL injection.
@@ -56,16 +56,16 @@ class DatabaseCountry {
       debugPrint('data has been deleted lah');
     }
   
-    Future<List<CountryDbModel>> getAllCountries() async {
+    Future<List<CityDbModel>> getAllCountries() async {
       var dbClient = await db;
       String sql;
-      sql = "SELECT * FROM countries";
+      sql = "SELECT * FROM cities";
   
       var result = await dbClient.rawQuery(sql);
       if (result.length == 0) return null;
   
-      List<CountryDbModel> list = result.map((item) {
-        return CountryDbModel.fromMap(item);
+      List<CityDbModel> list = result.map((item) {
+        return CityDbModel.fromMap(item);
       }).toList();
   
       print('all country results'+result.toString());

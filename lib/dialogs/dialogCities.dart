@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:splashbloc/localData/dbCountries.dart';
-import 'package:splashbloc/models/countrydbModel.dart';
-import 'package:splashbloc/models/countrylistModel.dart';
+import 'package:splashbloc/localData/dbCities.dart';
+import 'package:splashbloc/models/citydbModel.dart';
+import 'package:splashbloc/models/citylistModel.dart';
 
 class DialogCities extends StatefulWidget {
   @override
@@ -11,20 +11,19 @@ class DialogCities extends StatefulWidget {
 }
 
 class _DialogCitiesState extends State<DialogCities> {
-  DatabaseCountry db = DatabaseCountry();
-  List<CountryDbModel> dialogDbCountries;
+  DatabaseCity db = DatabaseCity();
+  List<CityDbModel> dialogDbCities;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // if(widget?.dbCountries?.length == 0){
     //   _saveCities();
     db.getAllCountries().then((value) {
       setState(() {
-        if (value.length == 0) {
+        if (value == null ||value.length == 0) {
           _saveCities();
         } else {
-          dialogDbCountries = value;
+          dialogDbCities = value;
         }
       });
     });
@@ -42,16 +41,16 @@ class _DialogCitiesState extends State<DialogCities> {
   }
 
   _saveCities() async {
-    CountryDbModel country1 = CountryDbModel('Kuala Lumpur');
-    CountryDbModel country2 = CountryDbModel('Johor Bahru');
-    CountryDbModel country3 = CountryDbModel('George Town');
+    CityDbModel country1 = CityDbModel('Kuala Lumpur');
+    CityDbModel country2 = CityDbModel('Johor Bahru');
+    CityDbModel country3 = CityDbModel('George Town');
     db.saveData(country1);
     db.saveData(country2);
     db.saveData(country3);
   }
 
   dialogContent(BuildContext context) {
-    List<CountryListModel> countryList = [];
+    List<CityListModel> countryList = [];
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: FutureBuilder(
@@ -65,8 +64,8 @@ class _DialogCitiesState extends State<DialogCities> {
                 );
               }
               countryList =
-                  json.map((e) => CountryListModel.fromJson(e)).toList();
-              debugPrint('dialog db countries: $dialogDbCountries');
+                  json.map((e) => CityListModel.fromJson(e)).toList();
+              debugPrint('dialog db countries: $dialogDbCities');
               return ListView.separated(
                 separatorBuilder: (context, index) => Divider(
                   color: Colors.black,
@@ -74,7 +73,6 @@ class _DialogCitiesState extends State<DialogCities> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: countryList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  debugPrint('country name'+ dialogDbCountries.any((element) => element.country == countryList[index].city).toString());
                   return GestureDetector(
                     onTap: () {
                       debugPrint(countryList[index].city);
@@ -85,7 +83,7 @@ class _DialogCitiesState extends State<DialogCities> {
                         children: <Widget>[
                           Expanded(
                               flex: 5, child: Text(countryList[index].city)),
-                          Icon(dialogDbCountries.any((element) => element.country == countryList[index].city)?Icons.add_circle:Icons.add)
+                          Icon(dialogDbCities.any((element) => element.city == countryList[index].city)?Icons.check_circle_outline:Icons.add)
                         ],
                       ),
                     ),

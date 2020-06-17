@@ -1,4 +1,4 @@
-class CountryListModel {
+class CityListModel {
   String city;
   String admin;
   String country;
@@ -9,7 +9,7 @@ class CountryListModel {
   String lng;
   String population;
 
-  CountryListModel(
+  CityListModel(
       {this.city,
       this.admin,
       this.country,
@@ -20,7 +20,7 @@ class CountryListModel {
       this.lng,
       this.population});
 
-  CountryListModel.fromJson(Map<String, dynamic> json) {
+  CityListModel.fromJson(Map<String, dynamic> json) {
     city = json['city'];
     admin = json['admin'];
     country = json['country'];
