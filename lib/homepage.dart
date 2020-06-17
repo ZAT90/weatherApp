@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:splashbloc/currentLocation/currentlocation.dart';
+import 'package:splashbloc/dialogs/dialogCities.dart';
+import 'package:splashbloc/featured/featuredCities.dart';
+import 'package:splashbloc/localData/dbCountries.dart';
 
+import 'models/countrydbModel.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -21,19 +25,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-   int _cIndex = 0;
-   List _pages = [
+  DatabaseCountry db = DatabaseCountry();
+  int _cIndex = 0;
+  List<CountryDbModel> dbCountries = [];
+  List _pages = [
     CurrentLocation(),
-    Text("Search"),
+    FeaturedCities(),
     Text("Account"),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    db.initDbCountries();
+  }
 
   void _incrementTab(index) {
     setState(() {
       _cIndex = index;
     });
   }
-
 
   // void _incrementCounter() {
   //   setState(() {
@@ -71,24 +83,27 @@ class _HomePageState extends State<HomePage> {
             title: new Text('Current location'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.check_circle),
-            title: new Text('Featured cities')
-          ),
+              icon: Icon(Icons.check_circle),
+              title: new Text('Featured cities')),
           BottomNavigationBarItem(
             icon: Icon(Icons.card_giftcard),
-            title: new Text('Selected Cities', style: TextStyle(color: Colors.black)),
-
+            title: new Text('Selected Cities',
+                style: TextStyle(color: Colors.black)),
           ),
         ],
-        onTap: (index){
-            _incrementTab(index);
+        onTap: (index) {
+          _incrementTab(index);
         },
-      ), 
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => DialogCities());
+        },
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

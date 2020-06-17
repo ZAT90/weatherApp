@@ -52,7 +52,7 @@ class _CurrentLocationState extends State<CurrentLocation> {
               child: Container(
                   alignment: Alignment.topLeft,
                   padding: EdgeInsets.all(10),
-                  child: buildSilverappChild(currentLocationModel)),
+                  child: buildSilverappChild(currentLocationModel, currentLatitude, currentLongitude)),
               // end of streambuilder
               titleWidget: Column(
                 children: <Widget>[
@@ -68,10 +68,13 @@ class _CurrentLocationState extends State<CurrentLocation> {
     );
   }
 
-  Column buildSilverappChild(LocationModel currentlocdata) {
-    if (currentLatitude.isNotEmpty) {
-      forecastbloc.fetchForecasts(currentLatitude, currentLongitude);
-    }
+  
+}
+
+Column buildSilverappChild(LocationModel currentlocdata, String currentLatitude, String currentLongitude) {
+    //if (currentLatitude.isNotEmpty) {
+    forecastbloc.fetchForecasts(currentLatitude, currentLongitude);
+    // }
     return Column(
       children: <Widget>[
         buildValues('Pressure', currentlocdata.main.pressure.toString()),
@@ -216,15 +219,14 @@ class _CurrentLocationState extends State<CurrentLocation> {
     );
   }
 
-  Container listItems(BuildContext context, String retVal, bool isHeader) {
-    return Container(
-        width: MediaQuery.of(context).size.width / 6,
-        child: Text(
-          retVal,
-          style: TextStyle(color: isHeader ? Colors.white : Colors.blueGrey),
-          textAlign: TextAlign.center,
-        ));
-  }
+Container listItems(BuildContext context, String retVal, bool isHeader) {
+  return Container(
+      width: MediaQuery.of(context).size.width / 6,
+      child: Text(
+        retVal,
+        style: TextStyle(color: isHeader ? Colors.white : Colors.blueGrey),
+        textAlign: TextAlign.center,
+      ));
 }
 
 Row buildValues(String title, String value) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:splashbloc/featured/featuredCities.dart';
 import 'package:splashbloc/homepage.dart';
-import 'package:splashbloc/secondScreen.dart';
 import 'package:splashbloc/splash.dart';
 
 
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   routes: {
     '/': (context) => SplashPage(),
     '/home': (context) => HomePage(),
-    '/second': (context) => SecondScreen(),
+    '/featured': (context) => FeaturedCities(),
   },
     );
   }
