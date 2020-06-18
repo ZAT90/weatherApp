@@ -1,0 +1,21 @@
+{
+  "main": {
+    "sample": "Example",
+    "save": "Save",
+    "pressure": "Tekanan",
+    "humidity": "Kelembapan",
+    "wind_speed": "Kelajuan angin",
+    "description": "Penerangan",
+    "today": "Hari ini",
+    "upcoming_forecast": "Ramalan Cuaca Akan Datang",
+    "curr_location": "Lokasi sekarang",
+    "featured_cities": "Bandar Pilihan",
+    "selected_cities": "Bandar terpilih",
+    "change_lang": "Tukar bahasa Aplikasi",
+    "please_pull": "sila tarik untuk menyegarkan",
+    "settings": "Tetapan",
+    "temp": "Suhu",
+    "temp_min": "Suhu minimum",
+    "temp_max": "Suhu Maximum"
+  }
+}

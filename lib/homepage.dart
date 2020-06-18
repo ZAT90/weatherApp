@@ -3,6 +3,7 @@ import 'package:splashbloc/currentLocation/currentlocation.dart';
 import 'package:splashbloc/dialogs/dialogCities.dart';
 import 'package:splashbloc/featured/featuredCities.dart';
 import 'package:splashbloc/localData/dbCities.dart';
+import 'package:splashbloc/persistence/locDelegate.dart';
 import 'package:splashbloc/selectedCities/selectedCities.dart';
 
 
@@ -24,19 +25,30 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>{
   DatabaseCity db = DatabaseCity();
   int _cIndex = 0;
-  List _pages = [
-    CurrentLocation(),
-    FeaturedCities(),
-    SelectedCities(),
-  ];
+  bool dialogClosed = false;
+  List _pages = [];
+  // List _pages = [
+  //   CurrentLocation(),
+  //   FeaturedCities(),
+  //   SelectedCities(),
+  // ];
+
+
 
   @override
   void initState() {
     super.initState();
     db.initDbCities();
+    this.setState(() { 
+      _pages = [
+    CurrentLocation(),
+    FeaturedCities(),
+    SelectedCities(),
+  ];
+    });
   }
 
   void _incrementTab(index) {
@@ -78,14 +90,14 @@ class _HomePageState extends State<HomePage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.location_city),
-            title: new Text('Current location'),
+            title: new Text(LangLibrary.main(context).curr_location),
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.check_circle),
-              title: new Text('Featured cities')),
+              title: new Text(LangLibrary.main(context).featured_cities)),
           BottomNavigationBarItem(
             icon: Icon(Icons.card_giftcard),
-            title: new Text('Selected Cities',
+            title: new Text(LangLibrary.main(context).selected_cities,
                 style: TextStyle(color: Colors.black)),
           ),
         ],
@@ -97,7 +109,13 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           showDialog(
               context: context,
-              builder: (BuildContext context) => DialogCities());
+              builder: (BuildContext context) => DialogCities(
+                onClosed: (dialogClosed){
+                  setState(() {
+                    dialogClosed = dialogClosed;
+                  });
+                },
+              ));
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),

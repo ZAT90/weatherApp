@@ -1,0 +1,21 @@
+{
+  "main": {
+    "sample": "Example",
+    "save": "Save",
+    "pressure": "Pressure",
+    "humidity": "Humidity",
+    "wind_speed": "Wind Speed",
+    "description": "Description",
+    "today": "Today",
+    "upcoming_forecast": "Upcoming Weather Forecast",
+    "curr_location": "Current location",
+    "featured_cities": "Featured cities",
+    "selected_cities": "Selected Cities",
+    "change_lang": "Change App Language",
+    "please_pull": "Please pull to refresh",
+    "settings": "Settings",
+    "temp": "Temperature",
+    "temp_min": "Minimum Temperature",
+    "temp_max": "Maximum Temperature"
+  }
+}

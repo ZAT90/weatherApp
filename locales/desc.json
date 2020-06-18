@@ -1,6 +1,21 @@
 {
   "main": {
     "sample": "This is sample description",
-    "save": "Use to save document"
+    "save": "Use to save document",
+    "pressure": "pressure",
+    "humidity": "humidity",
+    "wind_speed": "wind_speed",
+    "description": "description",
+    "today": "today",
+    "upcoming_forecast": "upcoming_forecast",
+    "curr_location": "curr_location",
+    "featured_cities": "featured_cities",
+    "selected_cities": "selected_cities",
+    "change_lang": "change_lang",
+    "please_pull": "please_pull",
+    "settings": "settings",
+    "temp": "temp",
+    "temp_min": "temp_min",
+    "temp_max": "temp_max"
   }
 }

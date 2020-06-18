@@ -1,42 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashbloc/featured/featuredCities.dart';
 import 'package:splashbloc/homepage.dart';
+import 'package:splashbloc/settings/settings.dart';
 import 'package:splashbloc/splash.dart';
-
+import 'package:splashbloc/persistence/locDelegate.dart';
+import 'package:splashbloc/localData/preferenceManager.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(Phoenix(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  String appLanguage = '';
+  Future initalizePreferences() async{
+    PreferenceManager.init(await SharedPreferences.getInstance());
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initalizePreferences().then((value){
+      if(PreferenceManager.instance.langCode.isEmpty){
+        
+        setState(() {
+          appLanguage = 'en';
+        });
+      }else{
+        setState(() {
+          appLanguage = PreferenceManager.instance.langCode;
+        });
+        
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      //locale: Locale(),
+      locale: appLanguage.isEmpty?Locale('en'):Locale(appLanguage),
+      localizationsDelegates: [
+        const LocDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales:
+          supportedLanguageMap.keys.map((key) => Locale(key)).toList(),
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/',
-  routes: {
-    '/': (context) => SplashPage(),
-    '/home': (context) => HomePage(),
-    '/featured': (context) => FeaturedCities(),
-  },
+      //home: SplashPage(),
+      routes: {
+        '/': (context) => SplashPage(),
+        '/home': (context) => HomePage(),
+        '/featured': (context) => FeaturedCities(),
+        '/settings': (context) => Settings(),
+      },
     );
   }
 }
-

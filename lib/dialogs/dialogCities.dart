@@ -6,6 +6,8 @@ import 'package:splashbloc/models/citydbModel.dart';
 import 'package:splashbloc/models/citylistModel.dart';
 
 class DialogCities extends StatefulWidget {
+  DialogCities({Key key, this.onClosed}) : super(key: key);
+  final Function(bool) onClosed;
   @override
   _DialogCitiesState createState() => _DialogCitiesState();
 }
@@ -73,15 +75,11 @@ class _DialogCitiesState extends State<DialogCities> {
                             behavior: HitTestBehavior.opaque,
                             onTap: () {
                               if (cityList[index].city == 'Kuala Lumpur') {
-                                debugPrint('do not change');
                               } else if (cityList[index].city ==
                                   'Johor Bahru') {
-                                debugPrint('do not change');
                               } else if (cityList[index].city ==
                                   'George Town') {
-                                debugPrint('do not change');
                               } else {
-                                debugPrint(cityList[index].city);
                                 saveOrDelete(cityList[index].city);
                               }
                             },
@@ -138,7 +136,8 @@ class _DialogCitiesState extends State<DialogCities> {
               padding: EdgeInsets.all(8.0),
               splashColor: Colors.blueAccent,
               onPressed: () {
-                /*...*/
+                widget?.onClosed(true);
+                Navigator.pop(context);
               },
               child: Text(
                 "OK",
@@ -152,12 +151,10 @@ class _DialogCitiesState extends State<DialogCities> {
   saveOrDelete(String city) {
     CityDbModel cityDbModel = dialogDbCities
         .firstWhere((element) => city == element.city, orElse: () => null);
-    debugPrint('citymodel $cityDbModel');
     if (cityDbModel == null) {
       CityDbModel countryadd = CityDbModel(city);
       db.saveData(countryadd);
       setState(() {
-        debugPrint('setstate called');
       });
     } else {
       db.deleteData(cityDbModel);

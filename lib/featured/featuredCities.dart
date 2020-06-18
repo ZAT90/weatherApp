@@ -34,41 +34,41 @@ class _FeaturedCitiesState extends State<FeaturedCities> {
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.all(10),
                 child: buildSilverappChild(
+                    context,
                     currentLocationModel,
                     currentLocationModel.coord.lat.toString(),
                     currentLocationModel.coord.lon.toString()),
-                //child: buildSilverappChild(currentLocationModel)
               ),
-              // end of streambuilder
-              titleWidget: Column(
-                children: <Widget>[
-                  //Text(currentLocationModel.name),
-                  new DropdownButton<String>(
-                    items: <String>[
-                      'Kuala Lumpur',
-                      'George Town',
-                      'Johor Bahru'
-                    ].map((String value) {
-                      return new DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (val) {
-                      setState(() {
-                        chosenCity = val;
-                      });
-                    },
-                    value: chosenCity,
-                    dropdownColor: Colors.blue,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Container(
-                    child: Text(
-                        '${temperature(currentLocationModel.main.temp)}°C'),
-                    //'${temperature(currentLocationModel.main.temp)}°C')),
-                  )
-                ],
+              marginTitle: MediaQuery.of(context).size.height / 7,
+              titleWidget: Container(
+                child: Column(
+                  children: <Widget>[
+                    new DropdownButton<String>(
+                      items: <String>[
+                        'Kuala Lumpur',
+                        'George Town',
+                        'Johor Bahru'
+                      ].map((String value) {
+                        return new DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (val) {
+                        setState(() {
+                          chosenCity = val;
+                        });
+                      },
+                      value: chosenCity,
+                      dropdownColor: Colors.blue,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Container(
+                      child: Text(
+                          '${temperature(currentLocationModel.main.temp)}'),
+                    )
+                  ],
+                ),
               ),
             );
           }),

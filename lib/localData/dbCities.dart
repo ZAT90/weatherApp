@@ -7,7 +7,7 @@ import 'package:splashbloc/models/citydbModel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
-class DatabaseCity {
+class DatabaseCity extends ChangeNotifier{
   static final DatabaseCity _instance = new DatabaseCity.internal();
   factory DatabaseCity() => _instance;
 
@@ -69,6 +69,7 @@ class DatabaseCity {
       }).toList();
   
       print('all country results'+result.toString());
+      this.notifyListeners();
       return list;
     }
   }

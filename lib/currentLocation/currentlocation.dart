@@ -1,19 +1,24 @@
+import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:splashbloc/bloc/currentlocationBloc.dart';
 import 'package:splashbloc/bloc/forecastBloc.dart';
 import 'package:splashbloc/components/customAppbar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:splashbloc/models/locationModel.dart';
 import 'package:splashbloc/models/weatherForecast.dart';
+import 'package:splashbloc/persistence/locDelegate.dart';
 
 class CurrentLocation extends StatefulWidget {
   @override
   _CurrentLocationState createState() => _CurrentLocationState();
 }
 
-class _CurrentLocationState extends State<CurrentLocation> {
+class _CurrentLocationState extends State<CurrentLocation>
+    with WidgetsBindingObserver {
   String currentLatitude = '';
   String currentLongitude = '';
+  bool locationEnabled = false;
   getPosition() async {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -24,14 +29,66 @@ class _CurrentLocationState extends State<CurrentLocation> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
   void initState() {
     super.initState();
-    getPosition();
+    WidgetsBinding.instance.addObserver(this);
+    checkLocation();
+  }
+
+  @override
+  void didChangeAppLifecycleState(final AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      checkLocation();
+    }
+  }
+
+  checkLocation() async {
+    bool isLocationEnabled = await Geolocator().isLocationServiceEnabled();
+    setState(() {
+      locationEnabled = isLocationEnabled;
+    });
+    if (!isLocationEnabled) {
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('No location access'),
+            content: const Text('Please turn on your location'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  AndroidIntent intent = new AndroidIntent(
+                    action: 'android.settings.LOCATION_SOURCE_SETTINGS',
+                  );
+                  intent.launch();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      getPosition();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // = new LocationModel();
     if (currentLatitude.isNotEmpty) {
       currentLocationBloc.fetchCurrentWeather(
           currentLatitude, currentLongitude);
@@ -42,7 +99,8 @@ class _CurrentLocationState extends State<CurrentLocation> {
           builder: (context, snapshot) {
             if (snapshot.data == null) {
               return Center(
-                child: CircularProgressIndicator(),
+                child: Lottie.asset('assets/lottie/loading.json',
+                    width: 200, height: 200),
               );
             }
             LocationModel currentLocationModel =
@@ -52,47 +110,60 @@ class _CurrentLocationState extends State<CurrentLocation> {
               child: Container(
                   alignment: Alignment.topLeft,
                   padding: EdgeInsets.all(10),
-                  child: buildSilverappChild(currentLocationModel, currentLatitude, currentLongitude)),
+                  child: buildSilverappChild(context, currentLocationModel,
+                      currentLatitude, currentLongitude)),
               // end of streambuilder
-              titleWidget: Column(
-                children: <Widget>[
-                  Text(currentLocationModel.name),
-                  Container(
-                      margin: EdgeInsets.only(top: 10),
-                      child: Text(
-                          '${temperature(currentLocationModel.main.temp)}°C')),
-                ],
+              marginTitle: MediaQuery.of(context).size.height / 6,
+              titleWidget: Flexible(
+                child: Column(
+                  children: <Widget>[
+                    Text(currentLocationModel.name),
+                    Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Text(
+                            '${temperature(currentLocationModel.main.temp)}')),
+                  ],
+                ),
               ),
             );
           }),
     );
   }
-
-  
 }
 
-Column buildSilverappChild(LocationModel currentlocdata, String currentLatitude, String currentLongitude) {
-    //if (currentLatitude.isNotEmpty) {
-    forecastbloc.fetchForecasts(currentLatitude, currentLongitude);
-    // }
-    return Column(
+Container buildSilverappChild(
+    BuildContext context,
+    LocationModel currentlocdata,
+    String currentLatitude,
+    String currentLongitude) {
+  forecastbloc.fetchForecasts(currentLatitude, currentLongitude);
+  return Container(
+    margin: EdgeInsets.only(left: 10),
+    width: MediaQuery.of(context).size.width - 40,
+    color: Color(0xD2691E),
+    child: Column(
       children: <Widget>[
-        buildValues('Pressure', currentlocdata.main.pressure.toString()),
+        buildValues(LangLibrary.main(context).pressure, currentlocdata.main.pressure.toString()),
         SizedBox(
           height: 15,
         ),
-        buildValues('Humidity', currentlocdata.main.humidity.toString()),
+        buildValues(LangLibrary.main(context).humidity, currentlocdata.main.humidity.toString()),
         SizedBox(
           height: 15,
         ),
-        buildValues('Wind speed', currentlocdata.wind.speed.toString()),
+        buildValues(LangLibrary.main(context).wind_speed, currentlocdata.wind.speed.toString()),
         SizedBox(
           height: 15,
         ),
-        buildValues('description', currentlocdata.weather[0].description),
+        buildValues(LangLibrary.main(context).description, currentlocdata.weather[0].description),
         SizedBox(
           height: 15,
         ),
+        Text(LangLibrary.main(context).upcoming_forecast,
+            style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                fontSize: 22)),
         StreamBuilder<List<WeatherList>>(
             stream: forecastbloc.currentForecast,
             builder: (context, snapshot) {
@@ -110,7 +181,7 @@ Column buildSilverappChild(LocationModel currentlocdata, String currentLatitude,
                       return Column(
                         children: <Widget>[
                           Container(
-                              width: MediaQuery.of(context).size.width - 40,
+                              // width: MediaQuery.of(context).size.width - 40,
                               color: Color(0xFFB74093),
                               child: Container(
                                 padding: EdgeInsets.all(8),
@@ -120,7 +191,7 @@ Column buildSilverappChild(LocationModel currentlocdata, String currentLatitude,
                                     Text(
                                       DateTime.parse(headerDate).day ==
                                               DateTime.now().day
-                                          ? 'today'
+                                          ? LangLibrary.main(context).today
                                           : headerDate,
                                       style: TextStyle(
                                           color: Colors.white,
@@ -133,9 +204,10 @@ Column buildSilverappChild(LocationModel currentlocdata, String currentLatitude,
                                         children: <Widget>[
                                           listItems(context, 'Time', true),
                                           listItems(context, 'Temp.', true),
-                                          listItems(context, 'Humidity', true),
-                                          listItems(context, 'Min.Temp.', true),
-                                          listItems(context, 'Max. Temp', true),
+                                          listItems(
+                                              context, 'Expected', true),
+                                          listItems(context, 'Min.Temp', true),
+                                          listItems(context, 'Max.Temp', true),
                                         ],
                                       ),
                                     )
@@ -183,31 +255,30 @@ Column buildSilverappChild(LocationModel currentlocdata, String currentLatitude,
 
                                           listItems(
                                               context,
-                                              '${temperature(sublist[index].main.temp)}°C',
+                                              '${temperature(sublist[index].main.temp)}',
                                               false),
-                                          //SizedBox(width: 10),
-                                          listItems(
-                                              context,
-                                              sublist[index]
-                                                  .main
-                                                  .humidity
-                                                  .toString(),
-                                              false),
+                                          // //SizedBox(width: 10),
+                                          // listItems(
+                                          //     context,
+                                          //     sublist[index]
+                                          //         .main
+                                          //         .humidity
+                                          //         .toString(),
+                                          //     false),
+                                          listItemIcon(context,  sublist[index].weather[0].icon, false),
                                           // SizedBox(width: 5),
                                           listItems(
                                               context,
-                                              '${temperature(sublist[index].main.tempMin)}°C',
+                                              '${temperature(sublist[index].main.tempMin)}',
                                               false),
                                           listItems(
                                               context,
-                                              '${temperature(sublist[index].main.tempMax)}°C',
+                                              '${temperature(sublist[index].main.tempMax)}',
                                               false)
-                                          // Text(sublist[index].dtTxt.substring(1,forecastList[index].dtTxt.indexOf(' ')) ),
                                         ],
                                       ),
                                     ],
                                   );
-                                  //return null;
                                 }),
                           )
                         ],
@@ -216,17 +287,25 @@ Column buildSilverappChild(LocationModel currentlocdata, String currentLatitude,
               );
             })
       ],
-    );
-  }
+    ),
+  );
+}
 
 Container listItems(BuildContext context, String retVal, bool isHeader) {
   return Container(
       width: MediaQuery.of(context).size.width / 6,
+      padding: EdgeInsets.only(top: 20),
       child: Text(
         retVal,
         style: TextStyle(color: isHeader ? Colors.white : Colors.blueGrey),
         textAlign: TextAlign.center,
       ));
+}
+
+Container listItemIcon(BuildContext context, String retVal, bool isHeader) {
+  return Container(
+      width: MediaQuery.of(context).size.width / 6,
+      child: Image.network('http://openweathermap.org/img/wn/$retVal@2x.png'));
 }
 
 Row buildValues(String title, String value) {
@@ -249,5 +328,5 @@ Row buildValues(String title, String value) {
 
 String temperature(double temperature) {
   double temp = temperature / 10;
-  return temp.toStringAsFixed(2).toString();
+  return temp.toStringAsFixed(2).toString()+'°C';
 }
