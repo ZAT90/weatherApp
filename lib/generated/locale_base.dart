@@ -10,7 +10,7 @@ class LocaleBase {
     _data = jsonDecode(strJson);
     initAll();
   }
-  
+
   Map<String, String> getData(String group) {
     return Map<String, String>.from(_data[group]);
   }

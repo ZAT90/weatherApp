@@ -13,16 +13,12 @@ class ApiProvider {
       String latitude, String longitude) async {
     final response = await dio.get(_baseUrl +
         'data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
-    // debugPrint('response data :${response.data}');
-
-    // if (response.statusCode == 200) {
     return LocationModel.fromJson(response.data);
   }
 
   Future<LocationModel> fetchFeaturedCityWeather(String cityName) async {
     final response =
         await dio.get(_baseUrl + 'data/2.5/weather?q=$cityName&appid=$apiKey');
-        //debugPrint('response data fetch city :${response.data}');
     return LocationModel.fromJson(response.data);
   }
 

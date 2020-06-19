@@ -6,7 +6,6 @@ import 'package:splashbloc/localData/dbCities.dart';
 import 'package:splashbloc/persistence/locDelegate.dart';
 import 'package:splashbloc/selectedCities/selectedCities.dart';
 
-
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
 
@@ -25,30 +24,20 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> {
   DatabaseCity db = DatabaseCity();
   int _cIndex = 0;
   bool dialogClosed = false;
-  List _pages = [];
-  // List _pages = [
-  //   CurrentLocation(),
-  //   FeaturedCities(),
-  //   SelectedCities(),
-  // ];
-
-
+  List _pages = [
+    CurrentLocation(), // current location data
+    FeaturedCities(), // KL, JB and GeorgeTown
+    SelectedCities(), // all the cities added by the user. by default has 3 man cities
+  ];
 
   @override
   void initState() {
     super.initState();
     db.initDbCities();
-    this.setState(() { 
-      _pages = [
-    CurrentLocation(),
-    FeaturedCities(),
-    SelectedCities(),
-  ];
-    });
   }
 
   void _incrementTab(index) {
@@ -57,36 +46,16 @@ class _HomePageState extends State<HomePage>{
     });
   }
 
-  // void _incrementCounter() {
-  //   setState(() {
-  //     // This call to setState tells the Flutter framework that something has
-  //     // changed in this State, which causes it to rerun the build method below
-  //     // so that the display can reflect the updated values. If we changed
-  //     // _counter without calling setState(), then the build method would not be
-  //     // called again, and so nothing would appear to happen.
-  //     _counter++;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: _pages[_cIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white60,
         currentIndex: _cIndex,
         selectedItemColor: Colors.green,
-        //type: BottomNavigationBarType.shifting ,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.location_city),
@@ -110,12 +79,12 @@ class _HomePageState extends State<HomePage>{
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogCities(
-                onClosed: (dialogClosed){
-                  setState(() {
-                    dialogClosed = dialogClosed;
-                  });
-                },
-              ));
+                    onClosed: (dialogClosed) {
+                      setState(() {
+                        dialogClosed = dialogClosed;
+                      });
+                    },
+                  ));
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),

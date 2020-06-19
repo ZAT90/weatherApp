@@ -154,8 +154,7 @@ class _DialogCitiesState extends State<DialogCities> {
     if (cityDbModel == null) {
       CityDbModel countryadd = CityDbModel(city);
       db.saveData(countryadd);
-      setState(() {
-      });
+      setState(() {});
     } else {
       db.deleteData(cityDbModel);
     }

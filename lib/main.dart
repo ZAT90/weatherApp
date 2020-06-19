@@ -21,33 +21,33 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String appLanguage = '';
-  Future initalizePreferences() async{
+  Future initalizePreferences() async {
     PreferenceManager.init(await SharedPreferences.getInstance());
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    initalizePreferences().then((value){
-      if(PreferenceManager.instance.langCode.isEmpty){
-        
+    initalizePreferences().then((value) {
+      if (PreferenceManager.instance.langCode.isEmpty) {
         setState(() {
           appLanguage = 'en';
         });
-      }else{
+      } else {
         setState(() {
           appLanguage = PreferenceManager.instance.langCode;
         });
-        
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       //locale: Locale(),
-      locale: appLanguage.isEmpty?Locale('en'):Locale(appLanguage),
+      locale: appLanguage.isEmpty ? Locale('en') : Locale(appLanguage),
       localizationsDelegates: [
         const LocDelegate(),
         GlobalMaterialLocalizations.delegate,

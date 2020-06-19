@@ -16,7 +16,7 @@ class CityDbModel {
   Map<String, dynamic> toMap() {
     var map = new Map<String, dynamic>();
     if (id != null) {
-     map["id"] = id;
+      map["id"] = id;
     }
     map["city"] = city;
 

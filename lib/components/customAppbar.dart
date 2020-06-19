@@ -33,7 +33,7 @@ class CustomAppBar extends PreferredSize {
                 pinned: true,
                 actions: <Widget>[
                   GestureDetector(
-                    onTap: ()=> Navigator.of(context).pushNamed('/settings') ,
+                    onTap: () => Navigator.of(context).pushNamed('/settings'),
                     child: Container(
                         margin: EdgeInsets.only(right: 20),
                         child: Icon(Icons.settings)),
@@ -71,8 +71,6 @@ class CustomAppBar extends PreferredSize {
                                   MediaQuery.of(context).size.height / 5.5,
                                   0,
                                   0),
-                              // margin: EdgeInsets.only(
-                              //     top: MediaQuery.of(context).size.height / 6),
                               child: Column(children: <Widget>[
                                 Row(
                                   children: <Widget>[

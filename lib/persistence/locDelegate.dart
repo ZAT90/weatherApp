@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:splashbloc/generated/locale_base.dart';
 
-
 const supportedLanguageMap = const {
   'en': 'locales/en.json',
   'ms': 'locales/ms.json',

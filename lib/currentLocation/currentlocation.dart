@@ -143,19 +143,23 @@ Container buildSilverappChild(
     color: Color(0xD2691E),
     child: Column(
       children: <Widget>[
-        buildValues(LangLibrary.main(context).pressure, currentlocdata.main.pressure.toString()),
+        buildValues(LangLibrary.main(context).pressure,
+            currentlocdata.main.pressure.toString()),
         SizedBox(
           height: 15,
         ),
-        buildValues(LangLibrary.main(context).humidity, currentlocdata.main.humidity.toString()),
+        buildValues(LangLibrary.main(context).humidity,
+            currentlocdata.main.humidity.toString()),
         SizedBox(
           height: 15,
         ),
-        buildValues(LangLibrary.main(context).wind_speed, currentlocdata.wind.speed.toString()),
+        buildValues(LangLibrary.main(context).wind_speed,
+            currentlocdata.wind.speed.toString()),
         SizedBox(
           height: 15,
         ),
-        buildValues(LangLibrary.main(context).description, currentlocdata.weather[0].description),
+        buildValues(LangLibrary.main(context).description,
+            currentlocdata.weather[0].description),
         SizedBox(
           height: 15,
         ),
@@ -204,8 +208,7 @@ Container buildSilverappChild(
                                         children: <Widget>[
                                           listItems(context, 'Time', true),
                                           listItems(context, 'Temp.', true),
-                                          listItems(
-                                              context, 'Expected', true),
+                                          listItems(context, 'Expected', true),
                                           listItems(context, 'Min.Temp', true),
                                           listItems(context, 'Max.Temp', true),
                                         ],
@@ -252,21 +255,14 @@ Container buildSilverappChild(
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           listItems(context, retVal, false),
-
                                           listItems(
                                               context,
                                               '${temperature(sublist[index].main.temp)}',
                                               false),
-                                          // //SizedBox(width: 10),
-                                          // listItems(
-                                          //     context,
-                                          //     sublist[index]
-                                          //         .main
-                                          //         .humidity
-                                          //         .toString(),
-                                          //     false),
-                                          listItemIcon(context,  sublist[index].weather[0].icon, false),
-                                          // SizedBox(width: 5),
+                                          listItemIcon(
+                                              context,
+                                              sublist[index].weather[0].icon,
+                                              false),
                                           listItems(
                                               context,
                                               '${temperature(sublist[index].main.tempMin)}',
@@ -328,5 +324,5 @@ Row buildValues(String title, String value) {
 
 String temperature(double temperature) {
   double temp = temperature / 10;
-  return temp.toStringAsFixed(2).toString()+'°C';
+  return temp.toStringAsFixed(2).toString() + '°C';
 }

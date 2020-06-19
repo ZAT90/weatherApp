@@ -10,11 +10,11 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
-      return new SplashScreen(
+    return new SplashScreen(
       seconds: 10,
-      navigateAfterSeconds:  HomePage(),
+      navigateAfterSeconds: HomePage(),
       imageBackground: AssetImage('assets/images/yahoo.png'),
       loaderColor: Colors.transparent,
     );
   }
-  }
+}

@@ -1,5 +1,3 @@
-
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceManager {
@@ -17,8 +15,6 @@ class PreferenceManager {
     this.pref = pref;
   }
 
-
   String get langCode => pref.get(USER_LANGUAGE) ?? "";
   set langCode(lngCd) => pref.setString(USER_LANGUAGE, lngCd);
-
 }
