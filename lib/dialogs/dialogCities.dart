@@ -62,6 +62,12 @@ class _DialogCitiesState extends State<DialogCities> {
                   }
                   cityList =
                       json.map((e) => CityListModel.fromJson(e)).toList();
+                  if(dialogDbCities == null){
+                    setData();
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
                   return Flexible(
                     child: ListView.separated(
                       separatorBuilder: (context, index) => Divider(
